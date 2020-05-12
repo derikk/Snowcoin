@@ -5,6 +5,8 @@
 
 module Snowcoin
 
+import SHA, Dates
+
 struct Transaction
 	sender
 	recipient
@@ -12,28 +14,47 @@ struct Transaction
 end
 
 struct Block
-	index::Integer
-	timestamp
+	index::Int
+	timestamp::Dates.DateTime
 	transactions::Array{Transaction}
 	proof
-	previoushash
+	previous_hash
 end
 
 mutable struct Blockchain
-	lastblock::Block
+	chain::Array{Block}
+	pending_transactions::Array{Transaction}
 end
 
+# Create the genesis block
+Blockchain() = (bc = Blockchain([], []); new_block(bc, 0, 0); return bc)
 
 "Create a new block and add it to the chain."
-function newblock(blockchain::Blockchain)
-end
+function new_block(bc::Blockchain, proof, previous_hash)
+	block = Block(length(bc.chain) + 1,
+	              Dates.now(Dates.UTC),
+	              bc.pending_transactions,
+	              proof,
+	              previous_hash)
 
-"Add a new transaction to the list of transactions."
-function newtransaction(blockchain::Blockchain)
+	bc.pending_transactions = []
+
+	push!(bc.chain, block)
+	return block
+end
+new_block(bc::Blockchain, proof) = new_block(bc, proof, hash_block(bc.chain[end]))
+
+"Create a new transaction to go into the next mined block."
+function new_transaction(bc::Blockchain, sender, recepient, amount::Real)
+	transaction = Transaction(sender, recepient, amount)
+	push!(bc.pending_transactions, transaction)
+
+	return bc.chain[end].index + 1
 end
 
 "Hash a block."
-function hashblock(block::Block)
+function hash_block(block::Block)
+	return SHA.sha256(string(block))
 end
 
 end
