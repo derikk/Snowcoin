@@ -33,6 +33,7 @@ function Blockchain()
 	return bc
 end
 
+Base.length(bc::Blockchain) = length(bc.chain)
 
 function is_valid(bc::Blockchain)
 	prev_block = bc.chain[1]
@@ -97,8 +98,8 @@ const DIFFICULTY = UInt8(12)
 # TODO: Adjust dynamically to limit total currency supply.
 const REWARD = 120
 
-# The number of units each snowcoin can be subdivided into.
-const FLAKES_PER_COIN = 100_000_000
+# The number of units (flakes) each snowcoin can be subdivided into.
+const PRECISION = 100_000_000
 
 
 function valid_proof(last_proof, proof, last_hash)
@@ -107,10 +108,7 @@ function valid_proof(last_proof, proof, last_hash)
     return guess_hash <= -1 >>> DIFFICULTY  # True if the first `difficulty` bits are 0
 end
 
-function proof_of_work(bc::Blockchain, last_block)
-	last_proof = last_block.proof
-	last_hash = shash(last_block)
-
+function proof_of_work(last_proof, last_hash)
     # The address in the generation transaction provides enough randomness
 	# for the hash, so we can start checking proofs at zero.
 	proof = 0
@@ -121,14 +119,11 @@ function proof_of_work(bc::Blockchain, last_block)
     return proof
 end
 
-Base.length(bc::Blockchain) = length(bc.chain)
 
-snowchain = Blockchain()
 
+include("server.jl")
 
 new_transaction!(snowchain, "Derik", "Andrew", 10)
 print(snowchain)
-
-include("server.jl")
 
 end

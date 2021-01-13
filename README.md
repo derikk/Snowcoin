@@ -15,6 +15,7 @@ propagation of accurate information.
 ## The cryptocurrency killer
 * 15 minutes after the first commit, Bitcoin [**halved** its block reward](https://www.blockchain.com/btc/block/630000). How's that mining working out for you now?
 * 12 hours after the implementation of the core blockchain, Telegram [abandons its TON network](https://telegra.ph/What-Was-TON-And-Why-It-Is-Over-05-12) and currency.
+* 5 days after the proof of work was added, the total cryptocurrency market cap [dropped 20%](https://fortune.com/2021/01/11/bitcoin-plunge-worst-crash-march-bubble/) from recent highs, the worst crash in nearly a year.
 * Who's next...?
 
 Remember, **There's no coin like Snowcoin.**
